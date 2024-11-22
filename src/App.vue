@@ -1,7 +1,9 @@
 <script setup>
+import AppLoader from './components/AppLoader.vue';
 </script>
 <template>
-  <h1>Start</h1>
+  <AppLoader />
+
 </template>
 
 <style>
