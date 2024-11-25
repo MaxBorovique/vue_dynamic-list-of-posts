@@ -6,7 +6,7 @@
   <div></div>
 </div>
 </template>
-<style>
+<style scoped>
 .lds-ring {
   display: inline-block;
   position: relative;
