@@ -1,6 +1,6 @@
 <script setup>
 defineProps({
-  posts: Array,
+  creatingPostHandler: Function,
 })
 </script>
 
@@ -10,7 +10,7 @@ defineProps({
     <div class="block">
       <div class="block is-flex is-justify-content-space-between">
         <p class="title">Posts</p>
-        <button type="button" class="button is-link">Add New Post</button>
+        <button @click="creatingPostHandler" type="button" class="button is-link">Add New Post</button>
       </div>
 
       <table class="table is-fullwidth is-striped is-hoverable is-narrow">

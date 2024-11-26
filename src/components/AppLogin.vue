@@ -1,8 +1,24 @@
+<script setup>
+
+const props = defineProps({
+  user: Object,
+});
+
+
+const emit = defineEmits(['update-user']);
+
+function createAccount(newEmail) {
+  emit('update-user', { ...props.user, email: newEmail});
+  console.log(props.user);
+}
+
+
+</script>
+
 <template>
-  <section class="container is-flex is-justify-content-center">
-    <form action="">  
-  <!-- <form onSubmit="{handleSubmit}" class="box mt-5"> -->
-    <h1 class="title is-3">You need to register"</h1>
+  <section class="container is-flex is-justify-content-center"> 
+  <form @submit.prevent="createAccount($event.target.value)"  class="box mt-5">
+    <h1 class="title is-3">You need to register</h1>
 
     <div class="field">
       <label class="label" htmlFor="user-email"> Email </label>
@@ -15,6 +31,7 @@
           class="input"
           placeholder="Enter your email"
           required
+          :value="user.email"
         />
 
         <span class="icon is-small is-left">

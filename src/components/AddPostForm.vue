@@ -1,9 +1,15 @@
+<script setup>
+import AppInput from './AppInput.vue';
+import TextAreaField from './TextAreaField.vue';
+</script>
+
 <template>
   <div class="content">
   <h2>title</h2>
 
   <form>
-    <!-- inputs... -->
+     <AppInput />
+     <TextAreaField />
 
     <div class="field is-grouped">
       <div class="control">
