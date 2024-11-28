@@ -1,21 +1,19 @@
 <script setup>
 import AddPostForm from './AddPostForm.vue';
 
-const props = defineProps({
+defineProps({
   isCreating: Boolean,
 })
-
-console.log(props.isCreating);
 
 </script>
 
 <template>
-  <div class="tile is-parent is-8-desktop" :class="isCreating ? 'Sidebar--open' : 'Sidebar'">
+  <div class="tile is-parent is-8-desktop Sidebar" :class="{'Sidebar--open': isCreating}">
     <div class="tile is-child box is-success ">
       <div class="tile is-child box is-success ">
         <div class="content">
           
-          <AddPostForm :isCreating="isCreating"/>
+          <AddPostForm />
 
         </div>
       </div>

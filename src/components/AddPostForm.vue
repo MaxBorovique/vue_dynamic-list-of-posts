@@ -1,6 +1,9 @@
 <script setup>
+import { inject } from 'vue';
 import AppInput from './AppInput.vue';
 import TextAreaField from './TextAreaField.vue';
+
+const creatingToggle = inject('creatingPostHandler')
 </script>
 
 <template>
@@ -16,7 +19,7 @@ import TextAreaField from './TextAreaField.vue';
         <button type="submit" class="button is-link">Save</button>
       </div>
       <div class="control">
-        <button type="reset" class="button is-link is-light">Cancel</button>
+        <button @click="creatingToggle" type="reset" class="button is-link is-light">Cancel</button>
       </div>
     </div>
   </form>

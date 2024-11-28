@@ -1,53 +1,21 @@
 <script setup>
-import { reactive, ref } from "vue";
-import AppHeader from "./components/AppHeader.vue";
-import AppSidebar from "./components/AppSidebar.vue";
-import PostList from "./components/PostList.vue";
-import AppLogin from "./components/AppLogin.vue";
+import { router } from "../routes";
+import { onMounted, ref } from "vue";
 
-const posts = ref([]);
-const isCreating = ref(false);
-const user = reactive({
-  email: null,
-  name: 'Maks', 
-  authStatus: true,
-  userPosts: {
-    title: '',
-    body: '',
+const isAuthorized = ref(true);
+
+function authCheck() {
+
+  if (!isAuthorized.value) {
+    router.push("Login");
+  } else {
+    router.push("Dashboard");
   }
-});
-
-const creatingPostHandler = () => {
-  isCreating.value = !isCreating.value;
-  console.log(isCreating.value);
 }
 
-const logoutHandler = () => {
-  user.email = '';
-  user.authStatus = false;
-};
-
+onMounted(authCheck);
 </script>
 
 <template>
-  <template v-if="!user.authStatus">
-    <AppLogin :user="user" @update-user="(updatedUser) => Object.assign(user, updatedUser)" />
-    </template>
-
-  <div v-else>
-    <AppHeader :user="user" :logoutHandler="logoutHandler"/>
-    <main>
-      <PostList :creatingPostHandler="creatingPostHandler" :posts="posts" />
-      <AppSidebar :is-creating="isCreating"/>
-    </main>
-  </div>
+  <router-view></router-view>
 </template>
-
-
-<style>
-main {
-  display: flex;
-  justify-content: center; 
-  align-items: center;
-}
-</style>
