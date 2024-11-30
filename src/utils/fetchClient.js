@@ -7,29 +7,24 @@ function wait(delay) {
   });
 }
 
-function request(url, method, data) {
+function request(url, method = 'GET', data = null) {
   const options = { 
-    method: 'GET',
-    body: null,
-    headers: null,
+    method,
+    body: data ? JSON.stringify(data) : undefined,
+    headers: data 
+    ? { 'Content-Type': 'application/json; charset=utf-8'}
+    : undefined
    };
-
-  if (data) {
-    options.body = JSON.stringify(data);
-    options.headers = {
-      'Content-Type': 'application/json; charset=utf-8',
-    }
 
     return wait(300)
     .then(() => fetch(BASE_URL + url, options))
     .then(response => response.json());
   }
-}
 
 export const client = {
   get: (url) => request(url),
   post: (url, data) => request(url, 'POST', data),
-  patch: (url, data) => request(url, 'POST', data),
+  patch: (url, data) => request(url, 'PATCH', data),
   delete: (url) => request(url, 'DELETE'),
 };
 

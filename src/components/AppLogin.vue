@@ -1,5 +1,5 @@
 <script setup>
-import { getUsers } from "@/api/fetchUsers";
+import { getUsers } from "@/api/users";
 import { onMounted, ref } from "vue";
 import AppRegistration from "./AppRegistration.vue";
 

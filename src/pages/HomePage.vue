@@ -1,24 +1,16 @@
   <script setup>
-  import { provide, reactive, ref } from "vue";
+  import { inject, provide, ref } from "vue";
   import AppHeader from "../components/AppHeader.vue";
   import AppSidebar from "../components/AppSidebar.vue";
   import PostList from "../components/PostList.vue";
   
   const posts = ref([]);
   const isCreating = ref(false);
-  const user = reactive({
-    email: null,
-    name: null,
-    authStatus: true,
-    userPosts: {
-      title: null,
-      body: null,
-    },
-  });
+
+  const user = inject('currentUser');
   
   const creatingPostHandler = () => {
     isCreating.value = !isCreating.value;
-    console.log(isCreating.value);
   };
   
   const logoutHandler = () => {
