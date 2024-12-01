@@ -1,3 +1,12 @@
+<script setup>
+defineProps({
+  authorName: String, 
+  authorEmail: String,
+  body: String,
+  mainButton: String,
+})
+</script>
+
 <template>
   <div className="field" data-cy="NameField">
   <label className="label" htmlFor="{`comment-author-name-${name}`}">

@@ -1,5 +1,5 @@
 <script setup>
-import AddPostForm from "./AddForm.vue";
+import AddForm from "./AddForm.vue";
 import PostPreview from "./PostPreview.vue";
 
 defineProps({
@@ -16,7 +16,7 @@ defineProps({
     <div class="tile is-child box is-success">
         <div class="content">
           <template v-if="isCreating">
-            <AddPostForm />
+            <AddForm />
           </template>
 
           <template v-if="isPostDetails">

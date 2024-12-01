@@ -1,13 +1,14 @@
 <script setup>
+import PostLoader from './PostLoader.vue';
+
 defineProps({
   posts: Array,
   creatingPostHandler: Function,
   isCreating: Boolean,
   detailsHandler: Function,
   isPostDetails: Boolean,
+  isLoading: Boolean,
 });
-
-
 
 </script>
 
@@ -27,14 +28,15 @@ defineProps({
           </button>
         </div>
 
-        <section class="is-flex is-justify-content-center" v-if="!posts.length">
-          <p>No posts yet.</p>
-        </section>
+        <PostLoader v-if="isLoading" />
 
         <table
           v-else
           class="table is-fullwidth is-striped is-hoverable is-narrow"
         >
+        <section class="is-flex is-justify-content-center" v-if="!posts.length">
+          <p>No posts yet.</p>
+        </section>
           <thead>
             <tr class="has-background-link-light">
               <th>ID</th>
@@ -47,7 +49,7 @@ defineProps({
               <td>{{ post.id }}</td>
               <td>{{ post.title }}</td>
               <td class="has-text-right is-vcentered">
-                <button @click="detailsHandler" type="button" class="button is-link">{{isPostDetails ? 'Close' : 'Open'}}</button>
+                <button @click="detailsHandler" type="button" class="button is-link" :class="{'is-light': !isPostDetails}">{{isPostDetails ? 'Close' : 'Open'}}</button>
               </td>
             </tr>
           </tbody>

@@ -7,6 +7,7 @@ import { router } from "../../routes";
 import { userPosts } from "@/api/posts";
 
 const posts = ref([]);
+const isLoading = ref(true);
 const isCreating = ref(false);
 const isPostDetails = ref(false);
 
@@ -26,6 +27,7 @@ const logoutHandler = () => {
 const getPosts = async() => {
   try {
     posts.value = await userPosts(user.value.id);
+    isLoading.value = false;
   } catch (error) {
     console.error(error);
   }
@@ -45,6 +47,7 @@ onMounted(getPosts);
     <div class="container">
       <div class="tile is-ancestor">
         <PostList
+          :isLoading="isLoading"
           :is-post-details="isPostDetails"
           :details-handler="detailsHandler"
           :creating-post-handler="creatingPostHandler"

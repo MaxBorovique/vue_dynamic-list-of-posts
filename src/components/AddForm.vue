@@ -1,28 +1,40 @@
 <script setup>
-import { inject } from 'vue';
-import AppInput from './AppInput.vue';
-import TextAreaField from './TextAreaField.vue';
+import { inject } from "vue";
+import AppInput from "./AppInput.vue";
+import TextAreaField from "./TextAreaField.vue";
 
-const creatingToggle = inject('creatingPostHandler')
+defineProps({
+  authorName: String,
+  authorEmail: String,
+  body: String,
+  mainButton: String,
+});
+
+const creatingToggle = inject("creatingPostHandler");
 </script>
 
 <template>
   <div class="content">
-  <h2>title</h2>
+    <h2>title</h2>
 
-  <form>
-     <AppInput />
-     <TextAreaField />
+    <form>
+      <AppInput/>
+      <TextAreaField />
 
-    <div class="field is-grouped">
-      <div class="control">
-        <button type="submit" class="button is-link">Save</button>
+      <div class="field is-grouped">
+        <div class="control">
+          <button type="submit" class="button is-link">Save</button>
+        </div>
+        <div class="control">
+          <button
+            @click="creatingToggle"
+            type="reset"
+            class="button is-link is-light"
+          >
+            Cancel
+          </button>
+        </div>
       </div>
-      <div class="control">
-        <button @click="creatingToggle" type="reset" class="button is-link is-light">Cancel</button>
-      </div>
-    </div>
-  </form>
-</div>
-
+    </form>
+  </div>
 </template>

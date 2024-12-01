@@ -3,11 +3,18 @@ import { getPostComments } from "@/api/comments";
 import AppComment from "./AppComment.vue";
 import NoComments from "./NoComments.vue";
 import WriteCommentBtn from "./WriteCommentBtn.vue";
+import AppForm from './AddForm.vue';
 import { onMounted, ref } from "vue";
 
 const props = defineProps({
   post: Object,
 });
+
+const isCommentCreating = ref(false);
+
+const startCreatingComment = () => {
+  isCommentCreating.value = true;
+}
 
 const comments = ref([]);
 
@@ -25,12 +32,15 @@ onMounted(getComments);
 
 <template>
   <template v-if="comments.length">
-    <AppComment :comments="comments"/>
+    <AppComment v-if="!isCommentCreating" :comments="comments"/>
   </template>
   <template v-else>
     <NoComments />
   </template>
 
+  <AppForm 
+  v-if="isCommentCreating"/>
 
-  <WriteCommentBtn/>
+
+  <WriteCommentBtn v-if="!isCommentCreating" :startCreatingComment="startCreatingComment"/>
 </template>
