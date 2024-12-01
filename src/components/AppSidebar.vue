@@ -1,24 +1,32 @@
 <script setup>
-import AddPostForm from './AddPostForm.vue';
+import AddPostForm from "./AddForm.vue";
+import PostPreview from "./PostPreview.vue";
 
 defineProps({
   isCreating: Boolean,
-})
-
+  isPostDetails: Boolean,
+});
 </script>
 
 <template>
-  <div class="tile is-parent is-8-desktop Sidebar" :class="{'Sidebar--open': isCreating}">
-    <div class="tile is-child box is-success ">
-      <div class="tile is-child box is-success ">
+  <div
+    class="tile is-parent is-8-desktop Sidebar"
+    :class="{ 'Sidebar--open': isCreating || isPostDetails}"
+  >
+    <div class="tile is-child box is-success">
         <div class="content">
-          
-          <AddPostForm />
+          <template v-if="isCreating">
+            <AddPostForm />
+          </template>
+
+          <template v-if="isPostDetails">
+            <PostPreview />
+          </template>
+
 
         </div>
       </div>
     </div>
-  </div>  
 </template>
 
 <style scoped>

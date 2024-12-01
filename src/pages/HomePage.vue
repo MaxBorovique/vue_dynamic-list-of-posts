@@ -8,6 +8,7 @@ import { userPosts } from "@/api/posts";
 
 const posts = ref([]);
 const isCreating = ref(false);
+const isPostDetails = ref(false);
 
 const user = inject("exsistingUser");
 
@@ -16,22 +17,26 @@ const creatingPostHandler = () => {
 };
 
 const logoutHandler = () => {
-  user.email = "";
-  user.authStatus = false;
+  user.name = '';
+  user.email = '';
   localStorage.clear("user");
   router.push("/login");
 };
 
 const getPosts = async() => {
   try {
-    // !! CHANGE FUNCTION ARGUMENTS
-    posts.value = await userPosts(4);
+    posts.value = await userPosts(user.value.id);
   } catch (error) {
     console.error(error);
   }
+};
+
+const detailsHandler = () => {
+  isPostDetails.value = !isPostDetails.value;
 }
 
 provide("creatingPostHandler", creatingPostHandler);
+provide('posts', posts);
 onMounted(getPosts);
 </script>
 <template>
@@ -40,12 +45,14 @@ onMounted(getPosts);
     <div class="container">
       <div class="tile is-ancestor">
         <PostList
-          :creatingPostHandler="creatingPostHandler"
+          :is-post-details="isPostDetails"
+          :details-handler="detailsHandler"
+          :creating-post-handler="creatingPostHandler"
           :posts="posts"
           :is-creating="isCreating"
         />
 
-        <AppSidebar :is-creating="isCreating" />
+        <AppSidebar :isPostDetails="isPostDetails" :is-creating="isCreating" />
       </div>
     </div>
   </main>

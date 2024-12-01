@@ -3,6 +3,8 @@ defineProps({
   posts: Array,
   creatingPostHandler: Function,
   isCreating: Boolean,
+  detailsHandler: Function,
+  isPostDetails: Boolean,
 });
 
 
@@ -24,7 +26,7 @@ defineProps({
             Add New Post
           </button>
         </div>
-        <!-- !! Change to real boolian value -->
+
         <section class="is-flex is-justify-content-center" v-if="!posts.length">
           <p>No posts yet.</p>
         </section>
@@ -45,7 +47,7 @@ defineProps({
               <td>{{ post.id }}</td>
               <td>{{ post.title }}</td>
               <td class="has-text-right is-vcentered">
-                <button type="button" class="button is-link">Open</button>
+                <button @click="detailsHandler" type="button" class="button is-link">{{isPostDetails ? 'Close' : 'Open'}}</button>
               </td>
             </tr>
           </tbody>

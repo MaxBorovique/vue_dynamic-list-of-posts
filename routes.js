@@ -14,6 +14,14 @@ export const router = createRouter({
       },
     },
     {
+      name: "Base",
+      path: "/",
+      component: () => import("@/pages/HomePage.vue"),
+      meta: {
+        isAuth: true,
+      },
+    },
+    {
       name: "Login",
       path: "/login",
       component: LoginPage,
