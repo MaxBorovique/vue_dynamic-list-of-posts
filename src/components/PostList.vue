@@ -1,15 +1,17 @@
 <script setup>
+import { inject } from 'vue';
 import PostLoader from './PostLoader.vue';
 
 defineProps({
   posts: Array,
   creatingPostHandler: Function,
-  isCreating: Boolean,
   detailsHandler: Function,
   isPostDetails: Boolean,
   isLoading: Boolean,
 });
 
+
+const isCreating = inject('isCreating');
 </script>
 
 <template>
@@ -29,14 +31,14 @@ defineProps({
         </div>
 
         <PostLoader v-if="isLoading" />
+        <section class="is-flex is-justify-content-center" v-if="!posts.length">
+          <p>No posts yet.</p>
+        </section>
 
         <table
           v-else
           class="table is-fullwidth is-striped is-hoverable is-narrow"
         >
-        <section class="is-flex is-justify-content-center" v-if="!posts.length">
-          <p>No posts yet.</p>
-        </section>
           <thead>
             <tr class="has-background-link-light">
               <th>ID</th>

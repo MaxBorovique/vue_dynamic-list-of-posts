@@ -15,6 +15,7 @@ const user = inject("exsistingUser");
 
 const creatingPostHandler = () => {
   isCreating.value = !isCreating.value;
+  isPostDetails.value = false;
 };
 
 const logoutHandler = () => {
@@ -35,9 +36,11 @@ const getPosts = async() => {
 
 const detailsHandler = () => {
   isPostDetails.value = !isPostDetails.value;
+  isCreating.value = false;
 }
 
 provide("creatingPostHandler", creatingPostHandler);
+provide("isCreating", isCreating);
 provide('posts', posts);
 onMounted(getPosts);
 </script>
@@ -47,15 +50,14 @@ onMounted(getPosts);
     <div class="container">
       <div class="tile is-ancestor">
         <PostList
-          :isLoading="isLoading"
+          :is-loading="isLoading"
           :is-post-details="isPostDetails"
           :details-handler="detailsHandler"
           :creating-post-handler="creatingPostHandler"
           :posts="posts"
-          :is-creating="isCreating"
         />
 
-        <AppSidebar :isPostDetails="isPostDetails" :is-creating="isCreating" />
+        <AppSidebar :is-post-details="isPostDetails" />
       </div>
     </div>
   </main>

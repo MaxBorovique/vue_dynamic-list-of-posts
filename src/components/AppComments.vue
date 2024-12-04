@@ -5,6 +5,7 @@ import NoComments from "./NoComments.vue";
 import WriteCommentBtn from "./WriteCommentBtn.vue";
 import AppForm from './AddForm.vue';
 import { onMounted, ref } from "vue";
+import AppInput from "./AppInput.vue";
 
 const props = defineProps({
   post: Object,
@@ -38,8 +39,9 @@ onMounted(getComments);
     <NoComments />
   </template>
 
-  <AppForm 
-  v-if="isCommentCreating"/>
+  <AppForm  v-if="isCommentCreating">
+    <AppInput />
+  </AppForm>
 
 
   <WriteCommentBtn v-if="!isCommentCreating" :startCreatingComment="startCreatingComment"/>

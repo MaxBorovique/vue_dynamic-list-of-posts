@@ -1,11 +1,14 @@
 <script setup>
+import { inject } from "vue";
 import AddForm from "./AddForm.vue";
 import PostPreview from "./PostPreview.vue";
 
 defineProps({
-  isCreating: Boolean,
   isPostDetails: Boolean,
 });
+
+const isCreating = inject('isCreating');
+
 </script>
 
 <template>
@@ -16,7 +19,7 @@ defineProps({
     <div class="tile is-child box is-success">
         <div class="content">
           <template v-if="isCreating">
-            <AddForm />
+            <AddForm/>
           </template>
 
           <template v-if="isPostDetails">
