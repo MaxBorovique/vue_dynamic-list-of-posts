@@ -91,6 +91,7 @@ onMounted(getPosts);
           :is-loading="isLoading"
           :is-post-details="isPostDetails"
           :details-handler="detailsHandler"
+          :selected-post-id="selectedPostId"
           :creating-post-handler="creatingPostHandler"
           :posts="posts"
         />

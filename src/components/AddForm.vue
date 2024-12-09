@@ -69,7 +69,7 @@ const createNewPost = async () => {
       <AppInput 
         v-model="formData.title" 
         :placeholder="isCreating ? 'Post title' : inputInfo.firstPlaceholder" 
-        :title="isCreating ? 'Post title' : inputInfo.firstPlaceholder" 
+        :title="isCreating ? 'Title' : inputInfo.firstPlaceholder" 
       />
 
 

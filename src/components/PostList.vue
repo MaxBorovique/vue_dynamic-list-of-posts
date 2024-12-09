@@ -2,7 +2,7 @@
 import { inject } from 'vue';
 import PostLoader from './PostLoader.vue';
 
-defineProps({
+const props = defineProps({
   posts: Array,
   creatingPostHandler: Function,
   detailsHandler: Function,
@@ -11,6 +11,10 @@ defineProps({
   selectedPostId: Number,
 });
 const isCreating = inject('isCreating');
+
+console.log(props.selectedPostId);
+
+
 
 </script>
 
@@ -54,7 +58,10 @@ const isCreating = inject('isCreating');
                 <button 
                 @click="detailsHandler(post.id)" 
                 type="button" class="button is-link" 
-                :class="{'is-light': !selectedPostId}">{{selectedPostId === post.id ? 'Close' : 'Open'}}
+                :class="{
+                  'is-light': selectedPostId !== post.id,
+                  }">
+                  {{selectedPostId === post.id ? 'Close' : 'Open'}}
               </button>
               </td>
             </tr>
