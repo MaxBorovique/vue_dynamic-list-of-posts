@@ -1,11 +1,11 @@
 <script setup>
-import { createUser, getExsistingUser } from "@/api/users";
+import { createUser, getexistingUser } from "@/api/users";
 import { router } from "../../routes";
 import { computed, ref } from "vue";
 
 const userEmail = ref("");
-const newUserName = ref('');
-const error = ref('');
+const newUserName = ref("");
+const error = ref("");
 const isRegistration = ref(false);
 
 const emailValidation = computed(() => {
@@ -14,23 +14,22 @@ const emailValidation = computed(() => {
 });
 
 const nameValidation = computed(() => {
-  return newUserName.value.length >= 4
-})
+  return newUserName.value.length >= 4;
+});
 
 const getUser = async () => {
-  if(!emailValidation.value) {
-    error.value = 'Please, enter the valid email address';
+  if (!emailValidation.value) {
+    error.value = "Please, enter the valid email address";
     return;
   }
 
   try {
-    const exsistingUser = await getExsistingUser(userEmail.value);
-    const [ foundUser ] = exsistingUser;
+    const existingUser = await getexistingUser(userEmail.value);
+    const [foundUser] = existingUser;
 
     if (foundUser) {
-      localStorage.setItem('user', JSON.stringify(foundUser));
-      console.log("Redirecting to dashboard...");
-      router.push('Dashboard');
+      localStorage.setItem("user", JSON.stringify(foundUser));
+      router.push("Dashboard");
     } else {
       isRegistration.value = true;
     }
@@ -41,8 +40,8 @@ const getUser = async () => {
 };
 
 const createNewUser = async () => {
-  if(!nameValidation.value) {
-    error.value = 'Name must be at least 4 charachters long';
+  if (!nameValidation.value) {
+    error.value = "Name must be at least 4 charachters long";
     return;
   }
 
@@ -52,11 +51,11 @@ const createNewUser = async () => {
       email: userEmail.value,
     });
 
-    localStorage.setItem('user', JSON.stringify(newUser));
+    localStorage.setItem("user", JSON.stringify(newUser));
 
     isRegistration.value = false;
-    error.value = '';
-    router.push('Dashboard');
+    error.value = "";
+    router.push("Dashboard");
     return newUser;
   } catch (error) {
     error.value = error.message || "Failed to create user";
@@ -65,15 +64,13 @@ const createNewUser = async () => {
 };
 
 const handleSubmit = () => {
-  error.value = '';
+  error.value = "";
   if (isRegistration.value) {
     createNewUser();
   } else {
     getUser();
   }
 };
-
-
 </script>
 
 <template>

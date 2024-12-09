@@ -15,8 +15,6 @@ const deleteCommentHandler = async(commentId) => {
     console.error('Failed deleting comments', error)
   }
 };
-
-console.log(props.comments);
 </script>
 <template>
   <article class="message is-small" v-for="comment in newCommentsList" :key="comment.id">

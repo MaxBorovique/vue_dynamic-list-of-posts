@@ -4,14 +4,30 @@ import AppHeader from "../components/AppHeader.vue";
 import AppSidebar from "../components/AppSidebar.vue";
 import PostList from "../components/PostList.vue";
 import { router } from "../../routes";
-import { userPosts } from "@/api/posts";
+import { deletePost, getOnePost, userPosts } from "@/api/posts";
 
 const posts = ref([]);
 const isLoading = ref(true);
 const isCreating = ref(false);
 const isPostDetails = ref(false);
+const selectedPostId = ref(null);
+const selectedPostDetails = ref(null);
 
-const user = inject("exsistingUser");
+const user = inject("existingUser");
+
+const getPosts = async () => {
+  if (!user.value) {
+    router.push("/login");
+    return;
+  }
+  try {
+    posts.value = await userPosts(user.value.id);
+    isLoading.value = false;
+  } catch (error) {
+    console.error(error);
+    isLoading.value = false;
+  }
+};
 
 const creatingPostHandler = () => {
   isCreating.value = !isCreating.value;
@@ -19,31 +35,53 @@ const creatingPostHandler = () => {
 };
 
 const logoutHandler = () => {
-  user.name = '';
-  user.email = '';
+  user.name = "";
+  user.email = "";
   localStorage.clear("user");
   router.push("/login");
 };
 
-const getPosts = async() => {
+const detailsHandler = async (id) => {
+  if (selectedPostId.value === id) {
+    selectedPostId.value = null;
+    selectedPostDetails.value = null;
+    isPostDetails.value = false;
+    return;
+  }
+
   try {
-    posts.value = await userPosts(user.value.id);
-    isLoading.value = false;
+    selectedPostId.value = id;
+    selectedPostDetails.value = await getOnePost(id);
+    isPostDetails.value = true;
+    isCreating.value = false;
   } catch (error) {
-    console.error(error);
+    console.error("Failed to get User Posts", error);
   }
 };
 
-const detailsHandler = () => {
-  isPostDetails.value = !isPostDetails.value;
-  isCreating.value = false;
-}
+const deletePostHandler = async (postId) => {
+  try {
+    await deletePost(postId);
+    posts.value = posts.value.filter((post) => post.id !== postId);
+    selectedPostDetails.value = null;
+    selectedPostId.value = null;
+    isPostDetails.value = false;
+  } catch (error) {
+    console.error("Failed deleting comments", error);
+  }
+};
 
 provide("creatingPostHandler", creatingPostHandler);
+provide("detailsHandler", detailsHandler);
+provide("deletePostHandler", deletePostHandler);
+provide("selectedPostDetails", selectedPostDetails);
+provide("selectedPostId", selectedPostId);
 provide("isCreating", isCreating);
-provide('posts', posts);
+provide("posts", posts);
+
 onMounted(getPosts);
 </script>
+
 <template>
   <AppHeader :user="user" :logoutHandler="logoutHandler" />
   <main class="section">

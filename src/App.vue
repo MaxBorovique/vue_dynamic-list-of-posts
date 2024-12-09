@@ -1,8 +1,8 @@
 <script setup>
-import { provide, ref } from 'vue';
+import { provide, ref } from "vue";
 
-const exsistingUser = ref(JSON.parse(localStorage.getItem('user')));
-provide('exsistingUser', exsistingUser)
+const existingUser = ref(JSON.parse(localStorage.getItem("user")));
+provide("existingUser", existingUser);
 </script>
 
 <template>

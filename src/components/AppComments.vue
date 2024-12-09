@@ -22,7 +22,6 @@ const comments = ref([]);
 const getComments = async () => {
   try {
     comments.value = await getPostComments(props.post.id);
-    console.log(props.post);
   } catch (error) {
     console.error('Error fetching comments', error);
   }

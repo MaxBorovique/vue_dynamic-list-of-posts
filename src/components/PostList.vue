@@ -8,10 +8,10 @@ defineProps({
   detailsHandler: Function,
   isPostDetails: Boolean,
   isLoading: Boolean,
+  selectedPostId: Number,
 });
-
-
 const isCreating = inject('isCreating');
+
 </script>
 
 <template>
@@ -46,12 +46,16 @@ const isCreating = inject('isCreating');
               <th class="has-text-right">Actions</th>
             </tr>
           </thead>
-          <tbody v-for="post in posts" :key="post.id">
-            <tr>
-              <td>{{ post.id }}</td>
+          <tbody>
+            <tr v-for="post in posts" :key="post.id">
+              <td>{{ post.id }} </td>
               <td>{{ post.title }}</td>
               <td class="has-text-right is-vcentered">
-                <button @click="detailsHandler" type="button" class="button is-link" :class="{'is-light': !isPostDetails}">{{isPostDetails ? 'Close' : 'Open'}}</button>
+                <button 
+                @click="detailsHandler(post.id)" 
+                type="button" class="button is-link" 
+                :class="{'is-light': !selectedPostId}">{{selectedPostId === post.id ? 'Close' : 'Open'}}
+              </button>
               </td>
             </tr>
           </tbody>

@@ -2,7 +2,7 @@
 import { inject, reactive, ref } from "vue";
 import AppInput from "./AppInput.vue";
 import TextAreaField from "./TextAreaField.vue";
-import { createPost } from "@/api/posts";
+import { createPost, getOnePost } from "@/api/posts";
 
 
 const creatingToggle = inject("creatingPostHandler");
@@ -29,6 +29,7 @@ const formData = reactive({
 
 
 const user = ref(JSON.parse(localStorage.getItem('user')));
+const detailsOpen = inject('detailsHandler');
 
 const createNewPost = async () => {
 
@@ -47,7 +48,10 @@ const createNewPost = async () => {
     formData.body = '';
     formData.title = '';
     formData.authorEmail = '';
-    
+
+    detailsOpen();
+    getOnePost(newPost.id);
+
     
     return newPost;
   } catch (error) {
@@ -83,7 +87,6 @@ const createNewPost = async () => {
         :placeholder="isCreating ? 'Post Body' : inputInfo.lastPlaceholder" 
       />
 
-      <!-- Buttons -->
       <div class="field is-grouped">
         <div class="control">
           <button type="submit" class="button is-link">

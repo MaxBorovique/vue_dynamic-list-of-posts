@@ -1,42 +1,38 @@
 <script setup>
-import { inject, ref } from "vue";
+import { inject } from "vue";
 import AppComments from "./AppComments.vue";
-import { deletePost } from "@/api/posts";
+import { computed } from "vue";
 
 defineProps({
   isPostDetails: Boolean,
 });
 
+const selectedPostDetails = inject('selectedPostDetails');
 
-const posts = inject("posts");
-console.log('posts', posts.value);
-const newPostList = ref([...posts.value])
-const deletePostHandler = async(postId) => {
-  newPostList.value = newPostList.value.filter(post => post.id !== postId);
-  try {
-    await deletePost(postId);
-  } catch (error) {
-    console.error('Failed deleting comments', error)
-  }
-};
+const hasPostDetails = computed(() => 
+  selectedPostDetails.value && selectedPostDetails.value.id
+)
+
+const deletePostHandler = inject('deletePostHandler');
+
 </script>
 
 <template>
-  <div class="block" v-for="post in newPostList" :key="post.id">
+  <div v-if="hasPostDetails" class="block" :key="selectedPostDetails.id">
     <div class="is-flex is-justify-content-space-between is-align-items-center">
-      <h2>#{{ post.id }}: {{ post.title }}</h2>
+      <h2>#{{ selectedPostDetails.id }}: {{ selectedPostDetails.title }}</h2>
       <div class="is-flex">
         <span class="icon is-small is-right is-clickable">
           <i class="fas fa-pen-to-square"></i>
         </span>
         <span class="icon is-small is-right has-text-danger is-clickable ml-3">
-          <i @click="deletePostHandler(post.id)" class="fas fa-trash"></i>
+          <i @click="deletePostHandler(selectedPostDetails.id)" class="fas fa-trash"></i>
         </span>
       </div>
     </div>
-    <p data-cy="PostBody">{{ post.body }}</p>
+    <p data-cy="PostBody">{{ selectedPostDetails.body }}</p>
     <div>
-      <AppComments :post="post" />
+      <AppComments :post="selectedPostDetails" />
     </div>
   </div>
 </template>
