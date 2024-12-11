@@ -5,31 +5,34 @@ import PostPreview from "./PostPreview.vue";
 
 defineProps({
   isPostDetails: Boolean,
+  isEditing: Boolean,
 });
 
-const isCreating = inject('isCreating');
-
+const isCreating = inject("isCreating");
 </script>
 
 <template>
   <div
     class="tile is-parent is-8-desktop Sidebar"
-    :class="{ 'Sidebar--open': isCreating || isPostDetails}"
+    :class="{ 'Sidebar--open': isCreating || isPostDetails }"
   >
     <div class="tile is-child box is-success">
-        <div class="content">
-          <template v-if="isCreating">
-            <AddForm/>
-          </template>
+      <div class="content">
+        <template v-if="isCreating || isEditing">
+          <AddForm
+            :is-editing="true"
+            :selected-post="selectedPostDetails"
+            @update="handleUpdatePost"
+            @cancel="cancelEditing"
+          />
+        </template>
 
-          <template v-if="isPostDetails">
-            <PostPreview />
-          </template>
-
-
-        </div>
+        <template v-if="isPostDetails">
+          <PostPreview :is-post-details="isPostDetails" />
+        </template>
       </div>
     </div>
+  </div>
 </template>
 
 <style scoped>

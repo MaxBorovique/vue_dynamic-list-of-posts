@@ -14,7 +14,7 @@ const hasPostDetails = computed(() =>
 )
 
 const deletePostHandler = inject('deletePostHandler');
-
+const updateNewPost = inject('updateNewPost');
 </script>
 
 <template>
@@ -23,7 +23,7 @@ const deletePostHandler = inject('deletePostHandler');
       <h2>#{{ selectedPostDetails.id }}: {{ selectedPostDetails.title }}</h2>
       <div class="is-flex">
         <span class="icon is-small is-right is-clickable">
-          <i class="fas fa-pen-to-square"></i>
+          <i @click="updateNewPost(selectedPostDetails.id)" class="fas fa-pen-to-square"></i>
         </span>
         <span class="icon is-small is-right has-text-danger is-clickable ml-3">
           <i @click="deletePostHandler(selectedPostDetails.id)" class="fas fa-trash"></i>

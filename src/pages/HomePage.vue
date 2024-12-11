@@ -71,12 +71,14 @@ const deletePostHandler = async (postId) => {
   }
 };
 
+
 provide("creatingPostHandler", creatingPostHandler);
 provide("detailsHandler", detailsHandler);
 provide("deletePostHandler", deletePostHandler);
 provide("selectedPostDetails", selectedPostDetails);
 provide("selectedPostId", selectedPostId);
 provide("isCreating", isCreating);
+
 provide("posts", posts);
 
 onMounted(getPosts);

@@ -1,13 +1,17 @@
 <script setup>
-import { inject, reactive, ref } from "vue";
+import { inject, provide, reactive, ref } from "vue";
 import AppInput from "./AppInput.vue";
 import TextAreaField from "./TextAreaField.vue";
-import { createPost, getOnePost } from "@/api/posts";
+import { createPost, updatePost } from "@/api/posts";
 import { createComment } from "@/api/comments";
 
 const creatingToggle = inject("creatingPostHandler");
 const isCreating = inject("isCreating");
 const selectedPostId = inject('selectedPostId');
+
+defineProps({
+  isEditing: Boolean,
+})
 
 const inputInfo = reactive({
   title: "Author Name",
@@ -45,13 +49,39 @@ const createNewPost = async () => {
     formData.authorEmail = "";
 
     detailsOpen();
-    getOnePost(newPost.id);
 
     return newPost;
   } catch (error) {
     console.error("Failed to create the post", error);
   }
 };
+
+const updateNewPost = async (postId) => {
+
+try {
+  const payload = {
+    userId: user.value.id,
+    title: formData.title,
+    body: formData.body,
+    authorEmail: formData.authorEmail || null,
+  };
+
+  const newPost = await updatePost(postId ,payload);
+
+  formData.body = "";
+  formData.title = "";
+  formData.authorEmail = "";
+
+  detailsOpen();
+
+  return newPost;
+} catch (error) {
+  console.error("Failed to create the post", error);
+}
+};
+
+
+
 
 const createNewComment = async () => {
   try {
@@ -80,7 +110,10 @@ const submitToggle = () => {
   } else {
     createNewComment();
   }
-}
+};
+
+provide('updateNewPost', updateNewPost);
+
 </script>
 
 <template>
