@@ -1,0 +1,17 @@
+const detailsHandler = async (id) => {
+//   if (selectedPostId.value === id) {
+//     selectedPostId.value = null;
+//     selectedPostDetails.value = null;
+//     isPostDetails.value = false;
+//     return;
+//   }
+
+//   try {
+//     selectedPostId.value = id;
+//     selectedPostDetails.value = await getOnePost(id);
+//     isPostDetails.value = true;
+//     isCreating.value = false;
+//   } catch (error) {
+//     console.error("Failed to get User Posts", error);
+//   }
+// };

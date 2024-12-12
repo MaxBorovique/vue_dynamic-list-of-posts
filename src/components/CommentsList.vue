@@ -1,11 +1,10 @@
 <script setup>
 import { getPostComments } from "@/api/comments";
-import AppComment from "./AppComment.vue";
-import NoComments from "./NoComments.vue";
-import WriteCommentBtn from "./WriteCommentBtn.vue";
-import AppForm from './AddForm.vue';
 import { onMounted, ref } from "vue";
-import AppInput from "./AppInput.vue";
+import Comment from "./Comment.vue";
+import NoCommentsMessage from "./NoCommentsMessage.vue";
+import Input from "./Input.vue";
+
 
 const props = defineProps({
   post: Object,
@@ -32,14 +31,14 @@ onMounted(getComments);
 
 <template>
   <template v-if="comments.length">
-    <AppComment v-if="!isCommentCreating" :comments="comments"/>
+    <Comment v-if="!isCommentCreating" :comments="comments"/>
   </template>
   <template v-else>
-    <NoComments />
+    <NoCommentsMessage />
   </template>
 
   <AppForm  v-if="isCommentCreating">
-    <AppInput />
+    <Input />
   </AppForm>
 
 

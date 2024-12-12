@@ -1,13 +1,13 @@
 <script setup>
-import { ref } from "vue";
 
 defineProps({
   modelValue: String,
   placeholder: String,
-  title: String,
+  label: String,
+  name: String,
+  error: String,
 });
 
-const isError = ref("");
 
 const emit = defineEmits(["update:modelValue"]);
 
@@ -18,8 +18,8 @@ const updateValue = (event) => {
 
 <template>
   <div class="field" data-cy="NameField">
-    <label class="label" :for="`comment-author-name-${modelValue}`">
-      {{ title }}
+    <label class="label" :for="name">
+      {{ label }}
     </label>
     <div class="control has-icons-left has-icons-right">
       <input
@@ -27,7 +27,7 @@ const updateValue = (event) => {
         @input="updateValue"
         type="text"
         :name="name"
-        :id="`comment-author-name-${name}`"
+        :id="name"
         :placeholder="placeholder"
         class="input"
         :class="is-danger"
@@ -37,13 +37,13 @@ const updateValue = (event) => {
       </span>
 
       <span
-        v-if="isError"
+        v-if="error"
         class="icon is-small is-right has-text-danger"
         data-cy="ErrorIcon"
       >
         <i className="fas fa-exclamation-triangle"></i>
       </span>
     </div>
-    <p v-if="isError" class="help" :class="{'is-danger': isError}" data-cy="{{ isError }}">error text</p>
+    <p v-if="error" class="help" :class="{'is-danger': error}" data-cy="ErrorMessage">{{ error }}</p>
   </div>
 </template>
