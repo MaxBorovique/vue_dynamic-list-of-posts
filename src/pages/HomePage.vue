@@ -98,7 +98,7 @@ onMounted(getPosts);
           :posts="posts"
         />
 
-        <AppSidebar :is-post-details="isPostDetails" />
+        <AppSidebar :detailsHandler="detailsHandler" :is-post-details="isPostDetails" />
       </div>
     </div>
   </main>
