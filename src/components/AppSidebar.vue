@@ -1,5 +1,6 @@
 <script setup>
-import { inject } from "vue";
+import { updatePost } from "@/api/posts";
+import { inject, reactive, ref } from "vue";
 import AddForm from "./AddForm.vue";
 import PostPreview from "./PostPreview.vue";
 
@@ -8,7 +9,38 @@ defineProps({
   isEditing: Boolean,
 });
 
+const currentPost = inject('selectedPostDetails');
 const isCreating = inject("isCreating");
+const posts = inject("posts");
+const isEditing = ref(false);
+
+const postEditing = async(data) => {
+  if(currentPost.value.title === data.title && currentPost.value.body === data.body) {
+    return;
+  }
+
+  try {
+    const {id, ...currentPostWithOutId} = currentPost.value;
+    const updatedPost = await updatePost(id, data);
+    const editedPost = posts.value.map(post => {
+      if(post.id !== id) return post;
+      
+      return {
+        ...post,
+        ...currentPostWithOutId
+      }
+    });
+    Object.assign(editedPost, updatedPost);
+    isEditing.value = false;
+  } catch (error) {
+    console.error('Failed to update the post', error)
+  }
+};
+
+const handleUpdatePost = async(post) => {
+currentPost.value = post;
+isEditing.value = true;
+};
 </script>
 
 <template>
@@ -20,15 +52,17 @@ const isCreating = inject("isCreating");
       <div class="content">
         <template v-if="isCreating || isEditing">
           <AddForm
-            :is-editing="true"
+            :post="currentPost"
+            :is-editing="isEditing"
             :selected-post="selectedPostDetails"
-            @update="handleUpdatePost"
+            @update="postEditing"
             @cancel="cancelEditing"
           />
         </template>
+        
 
         <template v-if="isPostDetails">
-          <PostPreview :is-post-details="isPostDetails" />
+          <PostPreview :post="currentPost" @update="handleUpdatePost"  :is-post-details="isPostDetails" />
         </template>
       </div>
     </div>

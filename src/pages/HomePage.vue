@@ -13,6 +13,7 @@ const isPostDetails = ref(false);
 const selectedPostId = ref(null);
 const selectedPostDetails = ref(null);
 
+
 const user = inject("existingUser");
 
 const getPosts = async () => {
@@ -29,17 +30,18 @@ const getPosts = async () => {
   }
 };
 
-const creatingPostHandler = () => {
-  isCreating.value = !isCreating.value;
-  isPostDetails.value = false;
-};
-
 const logoutHandler = () => {
   user.name = "";
   user.email = "";
   localStorage.clear("user");
   router.push("/login");
 };
+
+const creatingPostHandler = () => {
+  isCreating.value = !isCreating.value;
+  isPostDetails.value = false;
+};
+
 
 const detailsHandler = async (id) => {
   if (selectedPostId.value === id) {
@@ -78,7 +80,6 @@ provide("deletePostHandler", deletePostHandler);
 provide("selectedPostDetails", selectedPostDetails);
 provide("selectedPostId", selectedPostId);
 provide("isCreating", isCreating);
-
 provide("posts", posts);
 
 onMounted(getPosts);

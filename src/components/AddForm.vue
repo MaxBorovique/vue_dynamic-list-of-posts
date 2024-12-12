@@ -1,17 +1,19 @@
 <script setup>
-import { inject, provide, reactive, ref } from "vue";
+import { inject, reactive, ref } from "vue";
 import AppInput from "./AppInput.vue";
 import TextAreaField from "./TextAreaField.vue";
-import { createPost, updatePost } from "@/api/posts";
+import { createPost } from "@/api/posts";
 import { createComment } from "@/api/comments";
 
 const creatingToggle = inject("creatingPostHandler");
 const isCreating = inject("isCreating");
 const selectedPostId = inject('selectedPostId');
 
-defineProps({
+const props = defineProps({
   isEditing: Boolean,
-})
+  post: Object,
+});
+console.log(props.post.id);
 
 const inputInfo = reactive({
   title: "Author Name",
@@ -24,14 +26,15 @@ const inputInfo = reactive({
 });
 
 const formData = reactive({
-  userId: "",
-  title: "",
-  body: "",
+  userId: props.post.id || "",
+  title: props.post.title || "",
+  body: props.post.id || "",
   authorEmail: "",
 });
 
 const user = ref(JSON.parse(localStorage.getItem("user")));
 const detailsOpen = inject("detailsHandler");
+const emit = defineEmits(['update']);
 
 const createNewPost = async () => {
   try {
@@ -56,29 +59,29 @@ const createNewPost = async () => {
   }
 };
 
-const updateNewPost = async (postId) => {
+// const updateNewPost = async (postId) => {
 
-try {
-  const payload = {
-    userId: user.value.id,
-    title: formData.title,
-    body: formData.body,
-    authorEmail: formData.authorEmail || null,
-  };
+// try {
+//   const payload = {
+//     userId: user.value.id,
+//     title: formData.title,
+//     body: formData.body,
+//     authorEmail: formData.authorEmail || null,
+//   };
 
-  const newPost = await updatePost(postId ,payload);
+//   const newPost = await updatePost(postId ,payload);
 
-  formData.body = "";
-  formData.title = "";
-  formData.authorEmail = "";
+//   formData.body = "";
+//   formData.title = "";
+//   formData.authorEmail = "";
 
-  detailsOpen();
+//   detailsOpen();
 
-  return newPost;
-} catch (error) {
-  console.error("Failed to create the post", error);
-}
-};
+//   return newPost;
+// } catch (error) {
+//   console.error("Failed to create the post", error);
+// }
+// };
 
 
 
@@ -107,12 +110,12 @@ const createNewComment = async () => {
 const submitToggle = () => {
   if (isCreating.value) {
     createNewPost();
+  } else if(props.isEditing) {
+    emit('update', )
   } else {
     createNewComment();
   }
 };
-
-provide('updateNewPost', updateNewPost);
 
 </script>
 
