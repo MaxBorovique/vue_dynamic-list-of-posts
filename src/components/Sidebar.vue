@@ -1,7 +1,8 @@
 <script setup>
-defineProps({
+const props = defineProps({
   isSidebarOpen: Boolean
 });
+console.log(props.isSidebarOpen);
 
 </script>
 

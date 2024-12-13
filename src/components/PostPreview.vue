@@ -6,7 +6,7 @@ const props = defineProps({
   deletePostHandler: Function,
   selectedPost: Object,
 });
-// console.log('preview',props.post.id);
+
 const emit = defineEmits(['update']);
 
 const postEditing = () => {
@@ -29,8 +29,8 @@ const postEditing = () => {
       </div>
     </div>
     <p data-cy="PostBody">{{ props.selectedPost.body }}</p>
-    <div>
+  </div>
+    <div class="block">
       <CommentsList :post="selectedPost" />
     </div>
-  </div>
 </template>

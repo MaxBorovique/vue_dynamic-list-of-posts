@@ -3,7 +3,7 @@ import { inject, onMounted, reactive, ref } from "vue";
 import PostLoader from "./PostLoader.vue";
 import Posts from "./Posts.vue";
 import { router } from "../../routes.js";
-import { createPost, deletePost, getOnePost, userPosts } from "@/api/posts";
+import { createPost, deletePost, userPosts } from "@/api/posts";
 import Sidebar from "./Sidebar.vue";
 import PostForm from "./PostForm.vue";
 import PostPreview from "./PostPreview.vue";
@@ -49,25 +49,16 @@ const creatingPostHandler = () => {
 const sidebarCloser = () => {
   isSidebarOpen.value = false;
   formState.editing = false;
-  selectedPost.value = null;
+  selectedPost.value = {};
 };
 
-const postSelection = async(postId) => {
-  if(selectedPost.value.id === postId) {
-    selectedPost.value = null;
-    isSidebarOpen.value = false;
+const postSelection = (post) => {
+  if(selectedPost.value?.id === post.id) {
+    sidebarCloser();
+    return;
   }
-  try {
-    selectedPost.value = await getOnePost(postId);
-    formState.creating = false;
-    isSidebarOpen.value = true;
-
-    if(selectedPost.value) {
-      formState.preview = true;
-    }
-  } catch (error) {
-    console.log('Failed to open the post details');
-  }
+  isSidebarOpen.value = true;
+  selectedPost.value = post;
 }
 
 // LOGIC
@@ -236,7 +227,8 @@ onMounted(getPosts);
               <Posts 
               v-else 
               :posts="posts"
-              :postSelection="postSelection" />
+              :postSelection="postSelection"
+              :selected-post="selectedPost" />
             </div>
           </div>
         </div>

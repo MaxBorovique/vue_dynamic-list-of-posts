@@ -2,6 +2,7 @@
 defineProps({
   posts: Array,
   postSelection: Function,
+  selectedPost: Object,
 });
 </script>
 <template>
@@ -16,20 +17,20 @@ defineProps({
         <th class="has-text-right">Actions</th>
       </tr>
     </thead>
-    <tbody v-for="post in posts" :key="post.id">
-      <tr>
+    <tbody>
+      <tr v-for="post in posts" :key="post.id">
         <td>{{ post.id }}</td>
         <td>{{ post.title }}</td>
         <td class="has-text-right is-vcentered">
           <button
-            @click="postSelection(post.id)"
+            @click="postSelection(post)"
             type="button"
             class="button is-link"
             :class="{
-              'is-light': selectedPostId !== post.id,
+              'is-light': selectedPost?.id !== post.id,
             }"
           >
-            {{ selectedPostId === post.id ? "Close" : "Open" }}
+            {{ selectedPost?.id === post.id ? "Close" : "Open" }}
           </button>
         </td>
       </tr>

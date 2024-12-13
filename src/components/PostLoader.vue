@@ -1,11 +1,11 @@
 <script setup>
-import AppLoader from './AppLoader.vue';
+import Loader from './Loader.vue';
 
 
 </script>
 
 <template>
   <div class="is-flex is-justify-content-center is-align-items-center mt-2">
-  <AppLoader />
+  <Loader />
 </div>
 </template>

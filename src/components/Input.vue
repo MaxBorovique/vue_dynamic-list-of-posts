@@ -6,6 +6,7 @@ defineProps({
   label: String,
   name: String,
   error: String,
+  type: String,
 });
 
 
@@ -25,7 +26,7 @@ const updateValue = (event) => {
       <input
         :value="modelValue"
         @input="updateValue"
-        type="text"
+        type="type"
         :name="name"
         :id="name"
         :placeholder="placeholder"
