@@ -57,9 +57,9 @@ const postSelection = async(postId) => {
     selectedPost.value = null;
     isSidebarOpen.value = false;
   }
-
   try {
     selectedPost.value = await getOnePost(postId);
+    formState.creating = false;
     isSidebarOpen.value = true;
 
     if(selectedPost.value) {
@@ -81,6 +81,8 @@ const createNewPost = async (data) => {
     const newPost = await createPost(payload);
     posts.value.push(newPost);
     selectedPost.value = newPost;
+    formState.creating = false;
+    formState.preview = true;
   } catch (error) {
     console.error("Failed to create new post", error);
     isError.value = "Failed to create new post";
@@ -90,15 +92,12 @@ const createNewPost = async (data) => {
 const deletePostHandler = async (postId) => {
 
   try {
-    isLoading.value = true;
-    await deletePost(postId);
     posts.value = posts.value.filter((post) => post.id !== postId);
+    await deletePost(postId);
     selectedPost.value = null;
     isSidebarOpen.value = false;
   } catch (error) {
     console.error("Failed deleting comments", error);
-  } finally {
-    isLoading.value = false;
   }
 };
 

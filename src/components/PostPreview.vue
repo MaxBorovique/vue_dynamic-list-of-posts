@@ -31,9 +31,9 @@ const postEditing = () => {
         </span>
       </div>
     </div>
-    <p data-cy="PostBody">{{ props.selectedPost.id }}</p>
+    <p data-cy="PostBody">{{ props.selectedPost.body }}</p>
     <div>
-      <AppComments :post="USEVALUE" />
+      <AppComments :post="post" />
     </div>
   </div>
 </template>

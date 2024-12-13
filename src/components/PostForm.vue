@@ -2,6 +2,7 @@
 import TextAreaField from "./TextAreaField.vue";
 import Input from "./Input.vue";
 import { reactive } from "vue";
+import { BODY_ERROR, CREATION_BODY_PLACEHOLDER, CREATION_TITLE_PLACEHOLDER, TITLE_ERROR } from "@/const";
 
 defineProps({
   title: String,
@@ -17,20 +18,13 @@ const formData = reactive({
   bodyError: "",
 });
 
-const error = reactive({
-  title: "",
-  body: "",
-});
-
 const formAction = () => {
   const { title, body } = formData;
-
-
-  // TODO add consts and change to if
-  error.title = title ? "" : "Title is required";
-  error.body = body ? "" : "Body is required";
-
-  if (title || body) {
+  if (!title) {
+    formData.titleError = TITLE_ERROR;
+  } else if (!body) {
+    formData.bodyError = BODY_ERROR;
+  } else {
     emit("createPost", formData);
   }
 };
@@ -41,12 +35,19 @@ const formAction = () => {
     <h2>{{ title }}</h2>
 
     <form @reset="emit('close')" @submit.prevent="formAction($event)">
-      <Input :error='error.title' label="Title" name="title" v-model="formData.title" />
+      <Input
+        :placeholder="CREATION_TITLE_PLACEHOLDER"
+        :error="formData.titleError"
+        label="Title"
+        name="title"
+        v-model="formData.title"
+      />
 
       <TextAreaField
+        :placeholder="CREATION_BODY_PLACEHOLDER"
         label="Write Post Body"
         name="body"
-        :error="error.body"
+        :error="formData.bodyError"
         v-model="formData.body"
       />
 

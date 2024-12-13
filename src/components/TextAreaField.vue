@@ -5,7 +5,8 @@ defineProps({
   title: String,
   placeholder: String,
   modelValue: String,
-  error: String
+  error: String,
+  label: String
 });
 
 const emit = defineEmits(['update:modelValue']);
@@ -17,7 +18,7 @@ const updateValue = event => {
 
 <template>
   <div class="field" data-cy="BodyField">
-  <label class="label" htmlFor="{`comment-${name}`}"> {{ title }} </label>
+  <label class="label" for="name"> {{ label }} </label>
   <div class="control">
     <textarea
       id="{`comment-${name}`}"
