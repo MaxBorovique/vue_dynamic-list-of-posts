@@ -3,23 +3,24 @@ import { inject, onMounted, reactive, ref } from "vue";
 import PostLoader from "./PostLoader.vue";
 import Posts from "./Posts.vue";
 import { router } from "../../routes.js";
-import { createPost, userPosts } from "@/api/posts";
+import { createPost, deletePost, getOnePost, userPosts } from "@/api/posts";
 import Sidebar from "./Sidebar.vue";
 import PostForm from "./PostForm.vue";
 import PostPreview from "./PostPreview.vue";
 
-defineProps({});
-
 const posts = ref([]);
-const selectedPost = ref(null);
+const selectedPost = ref({});
 const isSidebarOpen = ref(false);
 const isError = ref("");
 const isLoading = ref(false);
 const formState = reactive({
   creating: false,
   editing: false,
+  preview: false,
 });
 const user = inject("existingUser");
+
+console.log('selectedPost', selectedPost.value);
 
 const getPosts = async () => {
   if (!user.value) {
@@ -41,13 +42,43 @@ const getPosts = async () => {
 const creatingPostHandler = () => {
   isSidebarOpen.value = true;
   formState.creating = true;
+  formState.editing = false;
+  formState.preview = false;
 };
+
+const sidebarCloser = () => {
+  isSidebarOpen.value = false;
+  formState.editing = false;
+  selectedPost.value = null;
+};
+
+const postSelection = async(postId) => {
+  if(selectedPost.value.id === postId) {
+    selectedPost.value = null;
+    isSidebarOpen.value = false;
+  }
+
+  try {
+    selectedPost.value = await getOnePost(postId);
+    isSidebarOpen.value = true;
+
+    if(selectedPost.value) {
+      formState.preview = true;
+    }
+  } catch (error) {
+    console.log('Failed to open the post details');
+  }
+}
 
 // LOGIC
 
 const createNewPost = async (data) => {
   try {
-    const newPost = await createPost(data);
+    const payload = {
+      userId: user.value.id,
+      ...data
+    }
+    const newPost = await createPost(payload);
     posts.value.push(newPost);
     selectedPost.value = newPost;
   } catch (error) {
@@ -56,25 +87,26 @@ const createNewPost = async (data) => {
   }
 };
 
-const sidebarCloser = () => {
-  isSidebarOpen.value = false;
-  formState.editing = false;
-  selectedPost.value = null;
-}
+const deletePostHandler = async (postId) => {
+
+  try {
+    isLoading.value = true;
+    await deletePost(postId);
+    posts.value = posts.value.filter((post) => post.id !== postId);
+    selectedPost.value = null;
+    isSidebarOpen.value = false;
+  } catch (error) {
+    console.error("Failed deleting comments", error);
+  } finally {
+    isLoading.value = false;
+  }
+};
+
+
 
 // 
 
-// const deletePostHandler = async (postId) => {
-//   try {
-//     await deletePost(postId);
-//     posts.value = posts.value.filter((post) => post.id !== postId);
-//     selectedPostDetails.value = null;
-//     selectedPostId.value = null;
-//     isPostDetails.value = false;
-//   } catch (error) {
-//     console.error("Failed deleting comments", error);
-//   }
-// };
+
 
 // FIXME (this is those part that was in sidebar)
 
@@ -202,7 +234,10 @@ onMounted(getPosts);
                 <p>{{ isError }}</p>
               </section>
 
-              <Posts v-else :posts="posts" />
+              <Posts 
+              v-else 
+              :posts="posts"
+              :postSelection="postSelection" />
             </div>
           </div>
         </div>
@@ -211,17 +246,21 @@ onMounted(getPosts);
           :isSidebarOpen="isSidebarOpen">
 
             <PostForm 
-            v-if="formState.creating" 
+            v-show="formState.creating" 
             buttonText="Create"
             @createPost='createNewPost($event)'
             @close="sidebarCloser"
             title="Create new post" />
             
             <PostForm 
-            v-else-if="formState.editing"
+            v-show="formState.editing"
             buttonText="Save"
             title="Post editing" />
-            <PostPreview v-else />
+
+            <PostPreview 
+            v-show="formState.preview" 
+            :deletePostHandler="deletePostHandler" 
+            :selected-post="selectedPost"/>
           </Sidebar>
       </div>
     </div>

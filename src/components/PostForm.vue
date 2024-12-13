@@ -13,7 +13,10 @@ const emit = defineEmits(["createPost", "updatePost", "close"]);
 const formData = reactive({
   title: "",
   body: "",
+  titleError: "",
+  bodyError: "",
 });
+
 const error = reactive({
   title: "",
   body: "",
@@ -22,11 +25,13 @@ const error = reactive({
 const formAction = () => {
   const { title, body } = formData;
 
+
+  // TODO add consts and change to if
   error.title = title ? "" : "Title is required";
   error.body = body ? "" : "Body is required";
 
   if (title || body) {
-    emit("createPost", { title, body });
+    emit("createPost", formData);
   }
 };
 </script>

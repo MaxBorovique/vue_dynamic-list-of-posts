@@ -1,14 +1,12 @@
 <script setup>
-import { ref } from 'vue';
 
 
 defineProps({
   title: String,
   placeholder: String,
   modelValue: String,
+  error: String
 });
-
-const isError = ref('');
 
 const emit = defineEmits(['update:modelValue']);
 
@@ -28,10 +26,10 @@ const updateValue = event => {
       @input="updateValue"
       :placeholder="placeholder"
       class="textarea"
-      :class="{'is-danger': isError}"
+      :class="{'is-danger': error}"
     ></textarea>
   </div>
 
-  <p class="help" :class="{'is-danger': isError}" data-cy="ErrorMessage">{{ isError }}</p>
+  <p class="help" :class="{'is-danger': error}" data-cy="ErrorMessage">{{ error }}</p>
 </div>
 </template>

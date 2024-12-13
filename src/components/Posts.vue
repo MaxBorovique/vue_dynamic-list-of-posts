@@ -1,6 +1,7 @@
 <script setup>
 defineProps({
   posts: Array,
+  postSelection: Function,
 });
 </script>
 <template>
@@ -21,7 +22,7 @@ defineProps({
         <td>{{ post.title }}</td>
         <td class="has-text-right is-vcentered">
           <button
-            @click="detailsHandler(post.id)"
+            @click="postSelection(post.id)"
             type="button"
             class="button is-link"
             :class="{
