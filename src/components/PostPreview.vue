@@ -1,15 +1,12 @@
 <script setup>
-import AppComments from "./CommentsList.vue";
+import CommentsList from "./CommentsList.vue";
 
 const props = defineProps({
-  post: Object,
   isPostDetails: Boolean,
   deletePostHandler: Function,
   selectedPost: Object,
 });
-
-
-console.log('sel-post', props.selectedPost);
+// console.log('preview',props.post.id);
 const emit = defineEmits(['update']);
 
 const postEditing = () => {
@@ -33,7 +30,7 @@ const postEditing = () => {
     </div>
     <p data-cy="PostBody">{{ props.selectedPost.body }}</p>
     <div>
-      <AppComments :post="post" />
+      <CommentsList :post="selectedPost" />
     </div>
   </div>
 </template>
