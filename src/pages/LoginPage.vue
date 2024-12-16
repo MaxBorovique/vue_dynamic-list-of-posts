@@ -1,5 +1,5 @@
 <script setup>
-import { createUser, getexistingUser } from "@/api/users";
+import { createUser, getExistingUser  } from "@/api/users";
 import { router } from "../../routes";
 import { computed, ref } from "vue";
 
@@ -24,7 +24,7 @@ const getUser = async () => {
   }
 
   try {
-    const existingUser = await getexistingUser(userEmail.value);
+    const existingUser = await getExistingUser(userEmail.value);
     const [foundUser] = existingUser;
 
     if (foundUser) {
