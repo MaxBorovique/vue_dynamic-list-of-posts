@@ -71,8 +71,8 @@ const createNewPost = async (data) => {
       userId: user.value.id,
       ...data
     }
+    posts.value.push(payload);
     const newPost = await createPost(payload);
-    posts.value.push(newPost);
     selectedPost.value = newPost;
     formState.creating = false;
     formState.preview = true;
