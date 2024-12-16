@@ -20,6 +20,7 @@ const startCreatingComment = () => {
 };
 
 const comments = ref([]);
+console.log("comments", comments.value.filter(comment => comment.id === 24205));
 
 const getComments = async () => {
   try {
@@ -33,7 +34,7 @@ const getComments = async () => {
 };
 
 const deleteCommentHandler = async (commentId) => {
-  comments.value.filter((comment) => comment.id !== commentId);
+  comments.value = comments.value.filter((comment) => comment.id !== commentId);
   try {
     await deleteComment(commentId);
   } catch (error) {

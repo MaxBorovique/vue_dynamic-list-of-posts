@@ -1,9 +1,7 @@
 <script setup>
-const props = defineProps({
+defineProps({
   isSidebarOpen: Boolean
 });
-console.log(props.isSidebarOpen);
-
 </script>
 
 <template>

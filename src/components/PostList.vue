@@ -40,10 +40,10 @@ const getPosts = async () => {
 
 // HANDLERS
 const creatingPostHandler = () => {
+  formState.preview = false;
   isSidebarOpen.value = true;
   formState.creating = true;
   formState.editing = false;
-  formState.preview = false;
 };
 
 const sidebarCloser = () => {
@@ -57,6 +57,8 @@ const postSelection = (post) => {
     sidebarCloser();
     return;
   }
+  formState.creating = false;
+  formState.preview = true;
   isSidebarOpen.value = true;
   selectedPost.value = post;
 }
@@ -237,19 +239,19 @@ onMounted(getPosts);
           :isSidebarOpen="isSidebarOpen">
 
             <PostForm 
-            v-show="formState.creating" 
+            v-if="formState.creating" 
             buttonText="Create"
             @createPost='createNewPost($event)'
             @close="sidebarCloser"
             title="Create new post" />
             
             <PostForm 
-            v-show="formState.editing"
+            v-if="formState.editing"
             buttonText="Save"
             title="Post editing" />
 
             <PostPreview 
-            v-show="formState.preview" 
+            v-if="formState.preview" 
             :deletePostHandler="deletePostHandler" 
             :selected-post="selectedPost"/>
           </Sidebar>
