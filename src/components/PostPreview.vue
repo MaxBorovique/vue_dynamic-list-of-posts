@@ -2,15 +2,15 @@
 import CommentsList from "./CommentsList.vue";
 
 const props = defineProps({
-  isPostDetails: Boolean,
   deletePostHandler: Function,
   selectedPost: Object,
+  formState: Object,
 });
 
 const emit = defineEmits(['update']);
 
 const postEditing = () => {
-  emit('update', props.post);
+  emit('updating', props.formState.editing);
 };
 
 </script>

@@ -3,7 +3,7 @@ import { inject, onMounted, reactive, ref } from "vue";
 import PostLoader from "./PostLoader.vue";
 import Posts from "./Posts.vue";
 import { router } from "../../routes.js";
-import { createPost, deletePost, userPosts } from "@/api/posts";
+import { createPost, deletePost, updatePost, userPosts } from "@/api/posts";
 import Sidebar from "./Sidebar.vue";
 import PostForm from "./PostForm.vue";
 import PostPreview from "./PostPreview.vue";
@@ -61,6 +61,12 @@ const postSelection = (post) => {
   selectedPost.value = post;
 };
 
+const handleUpdatePost = async () => {
+  formState.creating = false;
+  formState.preview = false;
+  formState.editing = true;
+};
+
 // LOGIC
 
 const createNewPost = async (data) => {
@@ -70,8 +76,8 @@ const createNewPost = async (data) => {
       ...data,
     };
 
-    posts.value.push(payload);
     const newPost = await createPost(payload);
+    posts.value.push(newPost);
     selectedPost.value = newPost;
     formState.creating = false;
     formState.preview = true;
@@ -91,74 +97,29 @@ const deletePostHandler = async (postId) => {
   }
 };
 
-//
+const postEditing = async (data) => {
+  if (
+    selectedPost.value.title === data.title &&
+    selectedPost.value.body === data.body
+  ) {
+    return;
+  }
 
-// FIXME (this is those part that was in sidebar)
+  try {
+    const updatedPost = await updatePost(selectedPost.value.id, data);
+    const index = posts.value.findIndex((post) => post.id === selectedPost.value.id);
 
-// const postEditing = async(data) => {
-//   if(currentPost.value.title === data.title && currentPost.value.body === data.body) {
-//     return;
-//   }
+    if(index !== -1) {
+      posts.value[index] = {...posts.value[index], ...updatedPost}
+     selectedPost.value = {...posts.value[index], ...updatedPost}
+    }
 
-//   try {
-//     const {id, ...currentPostWithOutId} = currentPost.value;
-//     const updatedPost = await updatePost(id, data);
-//     const editedPost = posts.value.map(post => {
-//       if(post.id !== id) return post;
-
-//       return {
-//         ...post,
-//         ...currentPostWithOutId
-//       }
-//     });
-//     Object.assign(editedPost, updatedPost);
-//     isEditing.value = false;
-//   } catch (error) {
-//     console.error('Failed to update the post', error)
-//   }
-// };
-
-// const handleUpdatePost = async(post) => {
-// currentPost.value = post;
-// isEditing.value = true;
-// };
-
-// TODO INPUT LOGIC
-// const props = defineProps({
-//   isEditing: Boolean,
-//   post: Object,
-// });
-
-// const user = ref(JSON.parse(localStorage.getItem("user")));
-// const detailsOpen = inject("detailsHandler");
-// const emit = defineEmits(['update']);
-
-// // const updateNewPost = async (postId) => {
-
-// // try {
-// //   const payload = {
-// //     userId: user.value.id,
-// //     title: formData.title,
-// //     body: formData.body,
-// //     authorEmail: formData.authorEmail || null,
-// //   };
-
-// //   const newPost = await updatePost(postId ,payload);
-
-// //   formData.body = "";
-// //   formData.title = "";
-// //   formData.authorEmail = "";
-
-// //   detailsOpen();
-
-// //   return newPost;
-// // } catch (error) {
-// //   console.error("Failed to create the post", error);
-// // }
-// // };
-
-//
-// };
+    formState.editing = false;
+    formState.preview = true;
+  } catch (error) {
+    console.error("Failed to update the post", error);
+  }
+};
 
 onMounted(async () => {
   await getPosts();
@@ -207,21 +168,25 @@ onMounted(async () => {
             <PostForm
               v-if="formState.creating"
               buttonText="Create"
-              @createPost="createNewPost($event)"
+              @postAction="createNewPost($event)"
               @close="sidebarCloser"
               title="Create new post"
             />
 
             <PostForm
               v-if="formState.editing"
+              :selected-post="selectedPost"
               buttonText="Save"
               title="Post editing"
+              @postAction="postEditing($event)"
             />
 
             <PostPreview
               v-if="formState.preview"
               :deletePostHandler="deletePostHandler"
               :selected-post="selectedPost"
+              :form-state="formState"
+              @updating="handleUpdatePost"
             />
           </Sidebar>
         </Transition>

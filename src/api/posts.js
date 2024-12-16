@@ -8,5 +8,5 @@ export const deletePost = postId => client.delete(`/posts/${postId}`);
 
 export const createPost = data => client.post('/posts', data);
 
-export const updatePost = (postId, data) => client.patch(`/posts${postId}`, data);
+export const updatePost = (postId, data) => client.patch(`/posts/${postId}`, data);
 

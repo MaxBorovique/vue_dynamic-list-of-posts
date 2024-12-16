@@ -4,16 +4,17 @@ import Input from "./Input.vue";
 import { reactive } from "vue";
 import { BODY_ERROR, CREATION_BODY_PLACEHOLDER, CREATION_TITLE_PLACEHOLDER, TITLE_ERROR } from "@/const";
 
-defineProps({
+const props = defineProps({
   title: String,
   buttonText: String,
+  selectedPost: Object,
 });
 
-const emit = defineEmits(["createPost", "updatePost", "close"]);
+const emit = defineEmits(["postAction", "close"]);
 
 const formData = reactive({
-  title: "",
-  body: "",
+  title: props.selectedPost.title ||"",
+  body: props.selectedPost.body || "",
   titleError: "",
   bodyError: "",
 });
@@ -25,7 +26,7 @@ const formAction = () => {
   } else if (!body) {
     formData.bodyError = BODY_ERROR;
   } else {
-    emit("createPost", formData);
+    emit("postAction", formData);
   }
 };
 </script>
