@@ -36,7 +36,6 @@ const getPosts = async () => {
   }
 };
 
-// HANDLERS
 const creatingPostHandler = () => {
   formState.preview = false;
   isSidebarOpen.value = true;
@@ -66,8 +65,6 @@ const handleUpdatePost = async () => {
   formState.preview = false;
   formState.editing = true;
 };
-
-// LOGIC
 
 const createNewPost = async (data) => {
   try {
@@ -107,11 +104,13 @@ const postEditing = async (data) => {
 
   try {
     const updatedPost = await updatePost(selectedPost.value.id, data);
-    const index = posts.value.findIndex((post) => post.id === selectedPost.value.id);
+    const index = posts.value.findIndex(
+      (post) => post.id === selectedPost.value.id
+    );
 
-    if(index !== -1) {
-      posts.value[index] = {...posts.value[index], ...updatedPost}
-     selectedPost.value = {...posts.value[index], ...updatedPost}
+    if (index !== -1) {
+      posts.value[index] = { ...posts.value[index], ...updatedPost };
+      selectedPost.value = { ...posts.value[index], ...updatedPost };
     }
 
     formState.editing = false;

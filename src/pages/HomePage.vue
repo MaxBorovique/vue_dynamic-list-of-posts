@@ -5,11 +5,6 @@ import { router } from "../../routes";
 import Header from "@/components/Header.vue";
 
 
-
-// const selectedPostId = ref(null);
-// const selectedPostDetails = ref(null);
-
-
 const user = inject("existingUser");
 
 const logoutHandler = () => {

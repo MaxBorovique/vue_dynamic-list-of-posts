@@ -1,8 +1,7 @@
 <script setup>
 defineProps({
-  isSidebarOpen: Boolean
+  isSidebarOpen: Boolean,
 });
-
 </script>
 
 <template>

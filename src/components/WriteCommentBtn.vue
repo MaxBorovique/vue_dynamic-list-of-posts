@@ -4,10 +4,15 @@ defineProps({
   isCommentCreating: Boolean,
 });
 
-const emit = defineEmits(['startCreating'])
+const emit = defineEmits(["startCreating"]);
 </script>
 
 <template>
-  <button @click="emit('startCreating', isCommentCreating)" type="button" class="button is-link">Write a comment</button>
-
+  <button
+    @click="emit('startCreating', isCommentCreating)"
+    type="button"
+    class="button is-link"
+  >
+    Write a comment
+  </button>
 </template>

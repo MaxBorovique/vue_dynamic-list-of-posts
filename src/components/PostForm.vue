@@ -13,8 +13,8 @@ const props = defineProps({
 const emit = defineEmits(["postAction", "close"]);
 
 const formData = reactive({
-  title: props.selectedPost.title ||"",
-  body: props.selectedPost.body || "",
+  title: props.selectedPost?.title || "",
+  body: props.selectedPost?.body || "",
   titleError: "",
   bodyError: "",
 });

@@ -1,10 +1,10 @@
 <template>
   <div className="lds-ring">
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
-</div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
 </template>
 <style scoped>
 .lds-ring {
@@ -42,5 +42,5 @@
     transform: rotate(360deg);
   }
 }
-
-</style>e
+</style>
+e

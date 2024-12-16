@@ -1,5 +1,4 @@
 <script setup>
-
 defineProps({
   modelValue: String,
   placeholder: String,
@@ -8,7 +7,6 @@ defineProps({
   error: String,
   type: String,
 });
-
 
 const emit = defineEmits(["update:modelValue"]);
 
@@ -31,7 +29,7 @@ const updateValue = (event) => {
         :id="name"
         :placeholder="placeholder"
         class="input"
-        :class="is-danger"
+        :class="is - danger"
       />
       <span class="icon is-small is-left">
         <i class="fas fa-user"></i>
@@ -45,6 +43,13 @@ const updateValue = (event) => {
         <i className="fas fa-exclamation-triangle"></i>
       </span>
     </div>
-    <p v-if="error" class="help" :class="{'is-danger': error}" data-cy="ErrorMessage">{{ error }}</p>
+    <p
+      v-if="error"
+      class="help"
+      :class="{ 'is-danger': error }"
+      data-cy="ErrorMessage"
+    >
+      {{ error }}
+    </p>
   </div>
 </template>

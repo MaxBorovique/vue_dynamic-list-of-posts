@@ -7,12 +7,11 @@ const props = defineProps({
   formState: Object,
 });
 
-const emit = defineEmits(['update']);
+const emit = defineEmits(["update"]);
 
 const postEditing = () => {
-  emit('updating', props.formState.editing);
+  emit("updating", props.formState.editing);
 };
-
 </script>
 
 <template>
@@ -24,13 +23,16 @@ const postEditing = () => {
           <i @click="postEditing" class="fas fa-pen-to-square"></i>
         </span>
         <span class="icon is-small is-right has-text-danger is-clickable ml-3">
-          <i @click="deletePostHandler(props.selectedPost.id)" class="fas fa-trash"></i>
+          <i
+            @click="deletePostHandler(props.selectedPost.id)"
+            class="fas fa-trash"
+          ></i>
         </span>
       </div>
     </div>
     <p data-cy="PostBody">{{ props.selectedPost.body }}</p>
   </div>
-    <div class="block">
-      <CommentsList :post="selectedPost" />
-    </div>
+  <div class="block">
+    <CommentsList :post="selectedPost" />
+  </div>
 </template>

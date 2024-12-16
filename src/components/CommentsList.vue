@@ -47,14 +47,14 @@ const creatingCommentClose = () => {
 };
 
 const createNewComment = async (data) => {
-  if(!data) {
+  if (!data) {
     return;
   }
-  
+
   try {
     const payload = {
       postId: props.post?.id,
-      ...data
+      ...data,
     };
 
     comments.value.push(payload);
@@ -62,9 +62,9 @@ const createNewComment = async (data) => {
     isCommentCreating.value = false;
     return newComment;
   } catch (error) {
-    console.error('Failed to create new comment', error)
+    console.error("Failed to create new comment", error);
   }
-}
+};
 
 watch(
   () => props.post.id,
@@ -89,9 +89,10 @@ watch(
     @startCreating="startCreatingComment"
   />
 
-  <CommentForm 
-  v-else @cancel='creatingCommentClose' 
-  :is-comment-creating="isCommentCreating" 
-  @create="createNewComment($event)"
+  <CommentForm
+    v-else
+    @cancel="creatingCommentClose"
+    :is-comment-creating="isCommentCreating"
+    @create="createNewComment($event)"
   />
 </template>
