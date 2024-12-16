@@ -2,6 +2,7 @@
 defineProps({
   isSidebarOpen: Boolean
 });
+
 </script>
 
 <template>

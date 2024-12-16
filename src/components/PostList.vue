@@ -20,8 +20,6 @@ const formState = reactive({
 });
 const user = inject("existingUser");
 
-console.log('selectedPost', selectedPost.value);
-
 const getPosts = async () => {
   if (!user.value) {
     router.push("/login");
@@ -53,7 +51,7 @@ const sidebarCloser = () => {
 };
 
 const postSelection = (post) => {
-  if(selectedPost.value?.id === post.id) {
+  if (selectedPost.value?.id === post.id) {
     sidebarCloser();
     return;
   }
@@ -61,7 +59,7 @@ const postSelection = (post) => {
   formState.preview = true;
   isSidebarOpen.value = true;
   selectedPost.value = post;
-}
+};
 
 // LOGIC
 
@@ -69,8 +67,9 @@ const createNewPost = async (data) => {
   try {
     const payload = {
       userId: user.value.id,
-      ...data
-    }
+      ...data,
+    };
+
     posts.value.push(payload);
     const newPost = await createPost(payload);
     selectedPost.value = newPost;
@@ -83,22 +82,16 @@ const createNewPost = async (data) => {
 };
 
 const deletePostHandler = async (postId) => {
-
   try {
     posts.value = posts.value.filter((post) => post.id !== postId);
+    sidebarCloser();
     await deletePost(postId);
-    selectedPost.value = null;
-    isSidebarOpen.value = false;
   } catch (error) {
     console.error("Failed deleting comments", error);
   }
 };
 
-
-
-// 
-
-
+//
 
 // FIXME (this is those part that was in sidebar)
 
@@ -164,38 +157,12 @@ const deletePostHandler = async (postId) => {
 // // }
 // // };
 
-// const createNewComment = async () => {
-//   try {
-//     const payload = {
-//       postId: selectedPostId.value,
-//       name: formData.title,
-//       body: formData.body,
-//       email: formData.authorEmail || null,
-//     };
-
-//     const newComment = await createComment(payload);
-
-//     formData.body = "";
-//     formData.title = "";
-//     formData.authorEmail = "";
-
-//     return newComment;
-//   } catch (error) {
-//     console.error("Failed to create the comment", error);
-//   }
+//
 // };
 
-// const submitToggle = () => {
-//   if (isCreating.value) {
-//     createNewPost();
-//   } else if(props.isEditing) {
-//     emit('update', )
-//   } else {
-//     createNewComment();
-//   }
-// };
-
-onMounted(getPosts);
+onMounted(async () => {
+  await getPosts();
+});
 </script>
 
 <template>
@@ -226,36 +193,66 @@ onMounted(getPosts);
                 <p>{{ isError }}</p>
               </section>
 
-              <Posts 
-              v-else 
-              :posts="posts"
-              :postSelection="postSelection"
-              :selected-post="selectedPost" />
+              <Posts
+                v-else
+                :posts="posts"
+                :postSelection="postSelection"
+                :selected-post="selectedPost"
+              />
             </div>
           </div>
         </div>
-          <Sidebar 
-          v-show="isSidebarOpen" 
-          :isSidebarOpen="isSidebarOpen">
+        <Transition name="sidebar">
+          <Sidebar v-if="isSidebarOpen" :isSidebarOpen="isSidebarOpen">
+            <PostForm
+              v-if="formState.creating"
+              buttonText="Create"
+              @createPost="createNewPost($event)"
+              @close="sidebarCloser"
+              title="Create new post"
+            />
 
-            <PostForm 
-            v-if="formState.creating" 
-            buttonText="Create"
-            @createPost='createNewPost($event)'
-            @close="sidebarCloser"
-            title="Create new post" />
-            
-            <PostForm 
-            v-if="formState.editing"
-            buttonText="Save"
-            title="Post editing" />
+            <PostForm
+              v-if="formState.editing"
+              buttonText="Save"
+              title="Post editing"
+            />
 
-            <PostPreview 
-            v-if="formState.preview" 
-            :deletePostHandler="deletePostHandler" 
-            :selected-post="selectedPost"/>
+            <PostPreview
+              v-if="formState.preview"
+              :deletePostHandler="deletePostHandler"
+              :selected-post="selectedPost"
+            />
           </Sidebar>
+        </Transition>
       </div>
     </div>
   </main>
 </template>
+<style scoped>
+.sidebar-enter-active,
+.sidebar-leave-active {
+  transition: all 0.5s ease-in-out;
+  max-width: 0;
+  opacity: 0;
+}
+
+.sidebar-enter-to,
+.sidebar-leave-from {
+  max-width: 50%;
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .sidebar-enter-active,
+  .sidebar-leave-active {
+    transition: all 0.5s ease-in-out;
+    transform: translateX(100%);
+  }
+
+  .sidebar-enter-to,
+  .sidebar-leave-from {
+    transform: translateX(0);
+  }
+}
+</style>
